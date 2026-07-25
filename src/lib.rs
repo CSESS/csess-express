@@ -90,7 +90,7 @@ fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render 
                                 tr {
                                     td(style=inline!(
                                         "background-color: #210d41; border-top: 6px solid rgb(107, 65, 244); border-bottom: 6px solid rgb(35, 125, 250);")) {
-                                        img(src="https://csess.su.hkust.edu.hk/email/mail_header_2526.png", width="100%");
+                                        img(src="https://csess.su.hkust.edu.hk/email/mail_header_2627.png", width="100%");
                                     }
                                 }
                                 tr {
@@ -108,11 +108,11 @@ fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render 
                 tr {
                     td(style=inline!("padding: 32px 10% !important; background-color: #50235f; color: #fff; text-align: center;")) {
                         p(style="font-size: 12px; font-weight: bold;") {
-                            : "The Computer Science and Engineering Students’ Society, Hong Kong University of Science and Technology Students’ Union"; br;
+                            : "The Computer Science and Engineering Students’ Society," br; "Hong Kong University of Science and Technology Students’ Union"; br;
                             : "香港科技大學學生會計算機科學及工程學系學生會";
                             @ if disclaimer.is_none() {
                                 br; br;
-                                : "You received this email because you are a member of CSESS."; : " ";
+                                : "You received this email because you are a member of CSESS."; br;
                                 a(style="color: #ccc; text-decoration: none;", href="http://lists.ust.hk/sympa/home", target="_blank", rel="noopener") {
                                     : "Unsubscribe";
                                 }
