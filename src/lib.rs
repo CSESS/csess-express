@@ -122,7 +122,10 @@ fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render 
                         p(style="font-size: 12px; font-weight: bold;") {
                             : "The Computer Science and Engineering Students' Society,";br;
                             : "Hong Kong University of Science and Technology Students' Union"; br;
-                            : "香港科技大學學生會計算機科學及工程學系學生會";
+                            : "香港科技大學學生會計算機科學及工程學系學生會"; br;
+                            : "You received this email because you are a member of CSESS."; br;
+                            a(style="color: #ccc; text-decoration: none;", href="http://lists.ust.hk/sympa/home", target="_blank", rel="noopener") {
+                            : "Unsubscribe";
                             @ if disclaimer.is_none() {
                                 br; br;
                                 : "You received this email because you are a member of CSESS."; br;
