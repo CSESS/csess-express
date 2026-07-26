@@ -2,13 +2,17 @@
 extern crate horrorshow;
 extern crate chrono;
 
-use horrorshow::prelude::*;
-use horrorshow::helper::doctype;
 use chrono::Local;
+use horrorshow::helper::doctype;
+use horrorshow::prelude::*;
 use regex::Regex;
 use wasm_bindgen::prelude::*;
 
-fn make_paragraph<'a>(paragraph: &'a str, index: usize, style: Option<&'a str>) -> Box<dyn Render + 'a> {
+fn make_paragraph<'a>(
+    paragraph: &'a str,
+    index: usize,
+    style: Option<&'a str>,
+) -> Box<dyn Render + 'a> {
     // If a block starts and ends with a HTML tag, render it as is
     if paragraph.starts_with("<") && paragraph.ends_with(">") {
         return box_html! {
@@ -30,7 +34,10 @@ fn make_paragraph<'a>(paragraph: &'a str, index: usize, style: Option<&'a str>) 
     let result = re.replace_all(paragraph, |caps: &regex::Captures| {
         let link_name = &caps[1];
         let link_url = &caps[2];
-        format!("<a style=\"color: #651FFF; text-decoration: none;\" href=\"{}\">{}</a>", link_url, link_name)
+        format!(
+            "<a style=\"color: #651FFF; text-decoration: none;\" href=\"{}\">{}</a>",
+            link_url, link_name
+        )
     });
 
     return box_html! {
@@ -57,7 +64,8 @@ fn make_font_style() -> Box<dyn Render> {
 }
 
 fn inline(extra: Option<&str>) -> String {
-    let default = "margin: 0; padding: 0; width: 100% !important; border-collapse: collapse !important;";
+    let default =
+        "margin: 0; padding: 0; width: 100% !important; border-collapse: collapse !important;";
     match extra {
         Some(extra) => format!("{} {}", default, extra),
         None => default.into(),
@@ -65,8 +73,12 @@ fn inline(extra: Option<&str>) -> String {
 }
 
 macro_rules! inline {
-    () => { inline(None) };
-    ($x: expr) => { inline(Some($x)) };
+    () => {
+        inline(None)
+    };
+    ($x: expr) => {
+        inline(Some($x))
+    };
 }
 
 fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render + 'a> {
@@ -108,7 +120,8 @@ fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render 
                 tr {
                     td(style=inline!("padding: 32px 10% !important; background-color: #50235f; color: #fff; text-align: center;")) {
                         p(style="font-size: 12px; font-weight: bold;") {
-                            : "The Computer Science and Engineering Students’ Society," br; "Hong Kong University of Science and Technology Students’ Union"; br;
+                            : "The Computer Science and Engineering Students' Society,";br;
+                            : "Hong Kong University of Science and Technology Students' Union"; br;
                             : "香港科技大學學生會計算機科學及工程學系學生會";
                             @ if disclaimer.is_none() {
                                 br; br;
@@ -145,23 +158,32 @@ pub fn make_html(raw: &str) -> String {
     let date = Local::now().format("Date: %a, %d %b %Y %H:%M:%S %z");
     let content_type = "Content-Type: text/html; charset=utf-8";
     let mime_version = "MIME-Version: 1.0";
-    let headers = format!("{}\n{}\n{}\n{}\n\n", headers.trim(), date, content_type, mime_version);
+    let headers = format!(
+        "{}\n{}\n{}\n{}\n\n",
+        headers.trim(),
+        date,
+        content_type,
+        mime_version
+    );
 
-    format!("{}", html! {
-        : Raw(headers.to_owned());
-        : doctype::HTML;
-        html {
-            head {
-                meta(http-equiv="Content-Type", content="text/html; charset=utf-8");
-                meta(name="viewport", content="width=device-width, initial-scale=1.0");
-                title: "CSESS Express";
-                : make_font_style();
-            }
-            body(style=inline!()) {
-                : make_table(body, disclaimer);
+    format!(
+        "{}",
+        html! {
+            : Raw(headers.to_owned());
+            : doctype::HTML;
+            html {
+                head {
+                    meta(http-equiv="Content-Type", content="text/html; charset=utf-8");
+                    meta(name="viewport", content="width=device-width, initial-scale=1.0");
+                    title: "CSESS Express";
+                    : make_font_style();
+                }
+                body(style=inline!()) {
+                    : make_table(body, disclaimer);
+                }
             }
         }
-    })
+    )
 }
 
 #[wasm_bindgen]
@@ -177,12 +199,15 @@ pub fn make_div(raw: &str) -> String {
     let disclaimer_exist = disclaimer_pattern.is_match(&raw);
 
     let mut split = raw.splitn(if disclaimer_exist { 3 } else { 2 }, "\n======\n");
-    let _headers = split.next();    // ignore headers
+    let _headers = split.next(); // ignore headers
     let disclaimer = if disclaimer_exist { split.next() } else { None };
     let body = split.next().unwrap();
 
-    format!("{}", box_html! {
-        : make_font_style();
-        : make_table(body, disclaimer);
-    })
+    format!(
+        "{}",
+        box_html! {
+            : make_font_style();
+            : make_table(body, disclaimer);
+        }
+    )
 }
