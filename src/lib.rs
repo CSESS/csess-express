@@ -126,6 +126,7 @@ fn make_table<'a>(body: &'a str, disclaimer: Option<&'a str>) -> Box<dyn Render 
                             : "You received this email because you are a member of CSESS."; br;
                             a(style="color: #ccc; text-decoration: none;", href="http://lists.ust.hk/sympa/home", target="_blank", rel="noopener") {
                             : "Unsubscribe";
+                            }
                             @ if disclaimer.is_none() {
                                 br; br;
                                 : "You received this email because you are a member of CSESS."; br;
